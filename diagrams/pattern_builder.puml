@@ -1,0 +1,37 @@
+@startuml builder
+skinparam classAttributeIconSize 0
+
+interface "IBuilder" <<interface>> {
+    +BuildHeader(): void
+    +BuildBody(data: string): void
+    +BuildFooter(): void
+    +GetReport(): string
+}
+
+class "ConcreteBuilder" <<struct>> {
+    -report: string
+    +BuildHeader(): void
+    +BuildBody(data: string): void
+    +BuildFooter(): void
+    +GetReport(): string
+}
+
+class "Director" <<struct>> {
+    -builder: IBuilder
+    +SetBuilder(b: IBuilder): void
+    +ConstructReport(data: string): void
+}
+
+' Реализация интерфейса
+ConcreteBuilder ..|> IBuilder
+
+' Агрегация: Директор хранит ссылку на строителя через интерфейс
+Director o-- IBuilder : <<uses>>
+
+note right of Director
+  Метод ConstructReport вызывает:
+  builder.BuildHeader()
+  builder.BuildBody(data)
+  builder.BuildFooter()
+end note
+@endum

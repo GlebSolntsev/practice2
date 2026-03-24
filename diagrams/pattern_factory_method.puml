@@ -1,0 +1,41 @@
+@startuml factory_method
+skinparam classAttributeIconSize 0
+skinparam actorStyle awesome
+
+interface "ReportBuilder" <<interface>> {
+    +SetHeader(title: string): void
+    +SetContent(data: string): void
+    +GetResult(): string
+}
+
+class "PDFBuilder" <<struct>> {
+    -content: string
+    +SetHeader(title: string): void
+    +SetContent(data: string): void
+    +GetResult(): string
+}
+
+class "HTMLBuilder" <<struct>> {
+    -content: string
+    +SetHeader(title: string): void
+    +SetContent(data: string): void
+    +GetResult(): string
+}
+
+abstract class "ReportFactory" <<abstract>> {
+    {abstract} +CreateBuilder(format: string): ReportBuilder
+}
+
+class "ConcreteReportFactory" <<singleton>> {
+    +CreateBuilder(format: string): ReportBuilder
+}
+
+' Реализация интерфейсов
+PDFBuilder ..|> ReportBuilder
+HTMLBuilder ..|> ReportBuilder
+
+' Отношения фабрики
+ConcreteReportFactory --|> ReportFactory
+ConcreteReportFactory ..> ReportBuilder : <<creates>>
+
+@endum
